@@ -2,7 +2,9 @@ from email import message
 from textwrap import fill
 from django.shortcuts import redirect, render
 from django.contrib import auth
-from .form import UserLoginForm, UserRegisterForm
+
+from .models import Post
+from .form import CreatePostForm, UserLoginForm, UserRegisterForm
 
 # Create your views here.
 def home(request):
@@ -24,25 +26,15 @@ def register(request):
 
 def login(request):
     if request.method == 'POST':
-        filled_form = UserLoginForm(request.POST)
-        # print(filled_form.is_valid())
-        if True:
-            # username = filled_form.cleaned_data.get('username')
-            # password = filled_form.cleaned_data.get('password')
-            username = request.POST['username']
-            password = request.POST['password']
-            print(username)
-            user = auth.authenticate(username=username, password=password)
-            if user is not None:
-                auth.login(request, user)
-                return redirect("post/")
-            else:
-                message = 'Login Failed'
-                form = UserLoginForm()
-                return render(request, 'login.html', {'login_form':form, 'message':message})
+        username = request.POST['username']
+        password = request.POST['password']
+        print(username)
+        user = auth.authenticate(username=username, password=password)
+        if user is not None:
+            auth.login(request, user)
+            return redirect("post")
         else:
-            print(filled_form.cleaned_data.get('password'))
-            message = 'Enter valid data'
+            message = 'Login Failed'
             form = UserLoginForm()
             return render(request, 'login.html', {'login_form':form, 'message':message})
     else:
@@ -51,8 +43,20 @@ def login(request):
 
 def logout(request):
     auth.logout(request)
-    return redirect('/')
+    return redirect('login')
 
+#TODO : convert GMT to IST OR show how much time passed after post
 def post(request):
-    
-    return render(request, 'post.html')
+    queryset = Post.objects.order_by('-updated_at')# -updated_at for reverse order
+    message = ''
+    if request.method == 'POST':
+        filled_form = CreatePostForm(request.POST)
+        if filled_form.is_valid():
+            instance = filled_form.save(commit=False)
+            instance.user = request.user
+            instance.save()
+            # redirect('post')
+        else:
+            message = 'Not valid'
+    post_form = CreatePostForm()
+    return render(request, 'post.html',{'posts':queryset,'post_form':post_form, 'message':message})

@@ -1,10 +1,11 @@
 <h1>Login</h1>
-
+{% if not user.is_authenticated %}
 <form action="{% url 'login' %}" method='post'>{% csrf_token %}
     {{ login_form.as_p }}
     <input type="submit" value="Login">
     <h2>{{ message }}</h2>
 </form>
-
+{% endif %}
 <h3><a href="{% url 'register' %}">Go to Register Page</a></h3>
 <h3><a href="{% url 'post' %}">Go to Post Page</a></h3>
+<h3><a href="{% url 'home' %}">Go to Home Page</a></h3>
