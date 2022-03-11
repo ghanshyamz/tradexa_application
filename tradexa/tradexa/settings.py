@@ -77,8 +77,8 @@ WSGI_APPLICATION = 'tradexa.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        # 'ENGINE': 'django.db.backends.sqlite3',
+        # 'NAME': BASE_DIR / 'db.sqlite3',
     },
     'user_db': {
         'ENGINE': 'django.db.backends.sqlite3',
@@ -133,4 +133,6 @@ STATIC_URL = 'static/'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-DATABASE_ROUTERS = ['routers.db_routers.UserRouter', 'routers.db_routers.ProductRouter']
+DATABASE_ROUTERS = ['routers.db_routers.UserRouter', 'routers.db_routers.ProductRouter',]
+
+AUTH_USER_MODEL = 'user.User'

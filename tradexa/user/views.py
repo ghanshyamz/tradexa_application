@@ -27,8 +27,10 @@ def login(request):
         filled_form = UserLoginForm(request.POST)
         # print(filled_form.is_valid())
         if True:
-            username = filled_form.cleaned_data.get('username')
-            password = filled_form.cleaned_data.get('password')
+            # username = filled_form.cleaned_data.get('username')
+            # password = filled_form.cleaned_data.get('password')
+            username = request.POST['username']
+            password = request.POST['password']
             print(username)
             user = auth.authenticate(username=username, password=password)
             if user is not None:
@@ -52,4 +54,5 @@ def logout(request):
     return redirect('/')
 
 def post(request):
-    pass
+    
+    return render(request, 'post.html')

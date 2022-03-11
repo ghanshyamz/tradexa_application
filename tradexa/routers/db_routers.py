@@ -1,6 +1,6 @@
 class UserRouter:
     
-    route_app_labels = {'user'}
+    route_app_labels = {'user','admin','auth','contenttypes'}
 
     def db_for_read(self, model, **hints):
         """
